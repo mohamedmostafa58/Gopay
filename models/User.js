@@ -13,10 +13,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please provide an email"],
       unique: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        "Please provide a valid email",
-      ],
     },
     password: {
       type: String,
@@ -47,6 +43,7 @@ const userSchema = mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    content: { type: [String], default: [] },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },

@@ -109,7 +109,11 @@ const Header = () => {
         <div className="flex justify-center max-w-[100vw]">
          <motion.button
          whileTap={{ scale: 0.95 }}
-         onClick={logoutHandler}
+         onClick={()=>{
+          sethidden(true);
+          logoutHandler();
+          
+        }}
          className={` ${
           hidden ? "hidden" : ""
         } px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md md:block transition duration-300 ease-in-out shadow-md z-10 max-w-[200px]`}

@@ -42,6 +42,24 @@ const AdminDashboard = () => {
             <div className="mb-4 text-gray-600">
               {`${user.verified}`}
             </div>
+            <div className="mb-4 text-gray-600 flex justify-between flex-wrap gap-6">
+            {user.content.length > 0 ? (
+              user.content.map((file, i) => (
+                <div key={i} className="mb-2">
+                  <a 
+                    href={`https://www.deverecheck.info/uploads/${user.email.split("@")[0]}/${file}`}
+                    className="text-blue-500 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {`File ${i+1}`}
+                  </a>
+                </div>
+              ))
+            ) : (
+              <div>No files available</div>
+            )}
+          </div>
             <div className="mb-4 text-gray-800 font-medium">
               Wallet Balance: ${user.wallet}
             </div>

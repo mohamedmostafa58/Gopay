@@ -2,12 +2,26 @@ const crypto = require("crypto");
 const User = require("../models/User");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
+const path = require('path');
+const fs = require("fs");
 // Fetch all users (admin only)
 const getusers = async (req, res) => {
   try {
+
     const users = await User.find({});
+    for (let user of users) {
+      const emailPrefix = user.email.split('@')[0];
+
+      const folderPath = path.join(__dirname, '../uploads', emailPrefix);
+      if (fs.existsSync(folderPath)) {
+        const fileNames = fs.readdirSync(folderPath);
+        user.content = fileNames; 
+        console.log(user.content)
+      } 
+    }
+    console.log(users)
     res.status(200).json(users);
-  } catch (error) {
+  }catch (error) {
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
@@ -27,7 +41,7 @@ const verifyuser = async (req, res) => {
     if (user.referredBy) {
       const referringUser = await User.findById(user.referredBy);
       if (referringUser) {
-        referringUser.wallet += 1; // Increase the referring user's wallet by 1 dollar
+        referringUser.wallet += 1; 
         await referringUser.save();
       }
     }
@@ -49,7 +63,6 @@ const register = async (req, res, next) => {
     return next(new Error("Please provide username, email and password"));
   }
 
-  // Check if user already exists
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -131,7 +144,7 @@ const forgotPassword = async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
     await user.save();
 
-    const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+    const resetUrl = `https://www.deverecheck.info/passwordreset/${resetToken}`;
     const message = `
     <!DOCTYPE html>
     <html lang="en">
